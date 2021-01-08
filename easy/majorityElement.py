@@ -1,6 +1,5 @@
 # https://leetcode.com/problems/majority-element/
 
-
 # https://leetcode.com/submissions/detail/440022210/
 # 01/07/2021 16:14  
 
