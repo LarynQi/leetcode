@@ -1,5 +1,95 @@
 # https://leetcode.com/problems/lru-cache/
 
+# https://leetcode.com/submissions/detail/447532755/
+# 01/24/2021 23:02  
+
+class DLL():
+    def __init__(self):
+        self.key = 0
+        self.val = 0
+        self.prev = None
+        self.next = None
+
+class LRUCache:
+    # Runtime Analysis: O(1) for `get` and `put`
+    # Space Analysis: O(capacity) for DLLs and Hashmap
+
+    def _add_node(self, node):
+        """
+        Add new node to front of DLL.
+        """
+        node.prev = self.head
+        node.next = self.head.next
+        self.head.next.prev = node
+        self.head.next = node
+    
+    def _remove_node(self, node):
+        """
+        Remove `node` from DLL.
+        """
+        node.prev.next = node.next
+        node.next.prev = node.prev
+        
+    def _move_to_head(self, node):
+        """
+        Move `node` to front of DLL.
+        """
+        self._remove_node(node)
+        self._add_node(node)
+        
+    def _pop_tail(self):
+        """
+        Pop the tail of the DLL.
+        """
+        ret = self.tail.prev
+        new_tail = self.tail.prev.prev
+        new_tail.next = self.tail
+        self.tail.prev = new_tail
+        return ret
+        
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = {}
+        self.size = 0
+        self.head, self.tail = DLL(), DLL()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            node = self.cache[key]
+            self._move_to_head(node)
+            return node.val
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            node = self.cache[key]
+            node.val = value
+            self._move_to_head(node)
+        else:
+            if self.size == self.capacity:
+                tail = self._pop_tail()
+                add = DLL()
+                add.key = key
+                add.val = value
+                self._add_node(add)
+                self.cache[key] = add
+                self.cache.pop(tail.key)
+            else:
+                add = DLL()
+                add.key = key
+                add.val = value
+                self._add_node(add)
+                self.size += 1
+                self.cache[key] = add
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+
 # https://leetcode.com/submissions/detail/435333043/
 # 12/27/2020 15:57
 
