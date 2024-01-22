@@ -1,0 +1,2 @@
+# Write your MySQL query statement below
+SELECT e1.employee_id FROM Employees AS e1 WHERE e1.salary < 30000 AND NOT EXISTS(SELECT e2.employee_id FROM Employees AS e2 WHERE e2.employee_id = e1.manager_id) AND e1.manager_id IS NOT NULL ORDER BY e1.employee_id;
